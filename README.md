@@ -1,6 +1,6 @@
 ## Initial Form
 Add 
-import { FormGroup, FormControl } from '@angular/forms'
+import { FormBuilder, FormControl } from '@angular/forms'
 
 Add ReactiveFormsModule in app.module.ts
 ```js
@@ -27,16 +27,19 @@ import { FormGroup, FormControl, Validators } from '@angular/forms'
   styleUrls: ['./signup-form.component.css']
 })
 export class SignupFormComponent implements OnInit {
-  form = new FormGroup({
-    username: new  FormControl('', [
-      Validators.required, 
-      Validators.minLength(3)
-    ]),
-    password: new FormControl('', Validators.required)
-  })
-  constructor() { }
+  form: any;
+
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    this.form = this.formBuilder.group({
+        username: ['', [
+          Validators.required, 
+          Validators.minLength(3),
+          UsernameValidators.cannotContainSpace
+        ]],
+        password: ['', Validators.required]
+      })
   }
 
   get username(){
@@ -86,17 +89,19 @@ export class UsernameValidators{
 Add validation in form
 ```js
 export class SignupFormComponent implements OnInit {
-  form = new FormGroup({
-    username: new  FormControl('', [
-      Validators.required, 
-      Validators.minLength(3),
-      UsernameValidators.cannotContainSpace // new validation
-    ]),
-    password: new FormControl('', Validators.required)
-  })
-  constructor() { }
+  form: any;
+
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+    this.form = this.formBuilder.group({
+      username: ['', [
+        Validators.required, 
+        Validators.minLength(3),
+        UsernameValidators.cannotContainSpace
+      ]],
+      password: ['', Validators.required]
+    })
   }
 
   get username(){
